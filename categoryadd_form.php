@@ -17,8 +17,10 @@
 /**
  * Form for editing custom SQL reporting categories.
  *
- * @package report_customsql
+ * @package report_lsusql
  * @copyright 2013 The Open University
+ * @copyright 2022 Louisiana State University
+ * @copyright 2022 Robert Russo
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -32,12 +34,12 @@ require_once(dirname(__FILE__) . '/locallib.php');
  * Form for editing custom SQL reporting categories.
  *
  * This is used by addcategory.php, for users who have
- * report/customsql:managecategories capability.
+ * report/lsusql:managecategories capability.
  *
  * @copyright 2013 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class report_customsql_addcategory_form extends moodleform {
+class report_lsusql_addcategory_form extends moodleform {
 
     // Form definition.
     public function definition() {
@@ -50,7 +52,7 @@ class report_customsql_addcategory_form extends moodleform {
         if ($categoryid) {
             $strsubmit = get_string('savechanges');
         } else {
-            $strsubmit = get_string('addcategory', 'report_customsql');
+            $strsubmit = get_string('addcategory', 'report_lsusql');
         }
 
         $mform->addElement('text', 'name', get_string('categoryname'), array('size' => '30'));
@@ -73,9 +75,9 @@ class report_customsql_addcategory_form extends moodleform {
             if (!isset($data['id'])) {
                 $data['id'] = 0;// Ensure id to check against.
             }
-            if ($DB->get_record_select('report_customsql_categories',
+            if ($DB->get_record_select('report_lsusql_categories',
                     'name = ? AND id != ?', array($data['name'], $data['id']))) {
-                $errors['name'] = get_string('categoryexists', 'report_customsql');
+                $errors['name'] = get_string('categoryexists', 'report_lsusql');
             }
         }
         return $errors;

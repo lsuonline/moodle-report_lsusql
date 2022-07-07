@@ -14,17 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace report_customsql\local;
+namespace report_lsusql\local;
 
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot . '/report/customsql/locallib.php');
+require_once($CFG->dirroot . '/report/lsusql/locallib.php');
 
 /**
- * Tests for the report_customsql\local\category.
+ * Tests for the report_lsusql\local\category.
  *
- * @package   report_customsql
+ * @package   report_lsusql
  * @copyright 2021 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

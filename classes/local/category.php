@@ -14,15 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace report_customsql\local;
+namespace report_lsusql\local;
 
-use report_customsql\utils;
+use report_lsusql\utils;
 
 /**
  * Category class.
  *
- * @package    report_customsql
+ * @package    report_lsusql
  * @copyright  2021 The Open University
+ * @copyright  2022 Louisiana State University
+ * @copyright  2022 Robert Russo
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class category {
@@ -56,7 +58,7 @@ class category {
     public function load_queries_data(array $queries): void {
         $statistic = [];
         $queriesdata = [];
-        foreach (report_customsql_runable_options() as $type => $description) {
+        foreach (report_lsusql_runable_options() as $type => $description) {
             $fitleredqueries = utils::get_number_of_report_by_type($queries, $type);
             $statistic[$type] = count($fitleredqueries);
             if ($fitleredqueries) {
@@ -112,6 +114,6 @@ class category {
      * @return \moodle_url Category's url.
      */
     public function get_url(): \moodle_url {
-        return report_customsql_url('category.php', ['id' => $this->id]);
+        return report_lsusql_url('category.php', ['id' => $this->id]);
     }
 }

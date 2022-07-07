@@ -17,13 +17,15 @@
 /**
  * Custom SQL reporting categories.
  *
- * Users with the report/customsql:managecategories capability can enter custom
+ * Users with the report/lsusql:managecategories capability can enter custom
  *
  * This page shows the list of categories, with edit icons, and an add new button
- * if you have the report/customsql:managecategories capability.
+ * if you have the report/lsusql:managecategories capability.
  *
- * @package report_customsql
+ * @package report_lsusql
  * @copyright 2013 The Open University
+ * @copyright 2022 Louisiana State University
+ * @copyright 2022 Robert Russo
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -33,8 +35,8 @@ require_once(dirname(__FILE__) . '/categoryadd_form.php');
 require_once($CFG->libdir . '/adminlib.php');
 
 $context = context_system::instance();
-admin_externalpage_setup('report_customsql', '', null, '/report/customsql/addcategory.php');
-require_capability('report/customsql:managecategories', $context);
+admin_externalpage_setup('report_lsusql', '', null, '/report/lsusql/addcategory.php');
+require_capability('report/lsusql:managecategories', $context);
 
 $relativeurl = 'addcategory.php';
 
@@ -47,35 +49,35 @@ if ($id) {
     $queryparams['categoryid'] = $id;
     $isadding = false;
     // Editing an existing category.
-    $category = $DB->get_record('report_customsql_categories',
+    $category = $DB->get_record('report_lsusql_categories',
             array('id' => $id), '*', MUST_EXIST);
 } else {
     $queryparams['categoryid'] = null;
     $isadding = true;
 }
 
-$mform = new report_customsql_addcategory_form(report_customsql_url($relativeurl), $queryparams);
+$mform = new report_lsusql_addcategory_form(report_lsusql_url($relativeurl), $queryparams);
 
 if ($mform->is_cancelled()) {
-    redirect(report_customsql_url('manage.php'));
+    redirect(report_lsusql_url('manage.php'));
 }
 
 if ($data = $mform->get_data()) {
     if ($isadding) {
-        $DB->insert_record('report_customsql_categories', $data);
+        $DB->insert_record('report_lsusql_categories', $data);
     } else {
         $updrec = new stdClass();
         $updrec->id = $data->id;
         $updrec->name = $data->name;
-        $DB->update_record('report_customsql_categories', $updrec);
+        $DB->update_record('report_lsusql_categories', $updrec);
     }
-    redirect(report_customsql_url('manage.php'));
+    redirect(report_lsusql_url('manage.php'));
 }
 
 if ($id) {
-    $headstr = get_string('editcategory', 'report_customsql');
+    $headstr = get_string('editcategory', 'report_lsusql');
 } else {
-    $headstr = get_string('addcategory', 'report_customsql');
+    $headstr = get_string('addcategory', 'report_lsusql');
 }
 
 echo $OUTPUT->header() . $OUTPUT->heading($headstr);

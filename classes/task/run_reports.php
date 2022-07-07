@@ -17,12 +17,14 @@
 /**
  * A scheduled task for Report Custom SQL, to run the scheduled reports.
  *
- * @package report_customsql
+ * @package report_lsusql
  * @copyright 2015 The Open University
+ * @copyright 2022 Louisiana State University
+ * @copyright 2022 Robert Russo
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace report_customsql\task;
+namespace report_lsusql\task;
 
 /**
  * A scheduled task for Report Custom SQL, to run the scheduled reports.
@@ -38,7 +40,7 @@ class run_reports extends \core\task\scheduled_task {
      * @return string
      */
     public function get_name() {
-        return get_string('crontask', 'report_customsql');
+        return get_string('crontask', 'report_lsusql');
     }
 
     /**
@@ -57,22 +59,23 @@ class run_reports extends \core\task\scheduled_task {
 
         $timenow = time();
 
-        list($startofthisweek, $startoflastweek) = report_customsql_get_week_starts($timenow);
-        list($startofthismonth) = report_customsql_get_month_starts($timenow);
+        list($startofthisweek, $startoflastweek) = report_lsusql_get_week_starts($timenow);
+        list($startofthismonth) = report_lsusql_get_month_starts($timenow);
 
         mtrace("... Looking for old temp CSV files to delete.");
-        $numdeleted = report_customsql_delete_old_temp_files($startoflastweek);
+        $numdeleted = report_lsusql_delete_old_temp_files($startoflastweek);
         if ($numdeleted) {
             mtrace("... $numdeleted old temporary files deleted.");
         }
 
         // Get daily scheduled reports.
-        $dailyreportstorun = report_customsql_get_ready_to_run_daily_reports($timenow);
+        $dailyreportstorun = report_lsusql_get_ready_to_run_daily_reports($timenow);
 
         // Get weekly and monthly scheduled reports.
-        $scheduledreportstorun = $DB->get_records_select('report_customsql_queries',
+        $scheduledreportstorun = $DB->get_records_select('report_lsusql_queries',
                                             "(runable = 'weekly' AND lastrun < :startofthisweek) OR
-                                             (runable = 'monthly' AND lastrun < :startofthismonth)",
+                                             (runable = 'monthly' AND lastrun < :startofthismonth) OR
+                                             (runable = 'asap')",
                                             array('startofthisweek' => $startofthisweek,
                                                   'startofthismonth' => $startofthismonth), 'lastrun');
 
@@ -80,9 +83,9 @@ class run_reports extends \core\task\scheduled_task {
         $reportstorun = array_merge($dailyreportstorun, $scheduledreportstorun);
 
         foreach ($reportstorun as $report) {
-            mtrace("... Running report " . report_customsql_plain_text_report_name($report));
+            mtrace("... Running report " . report_lsusql_plain_text_report_name($report));
             try {
-                report_customsql_generate_csv($report, $timenow);
+                report_lsusql_generate_csv($report, $timenow, false);
             } catch (\Exception $e) {
                 $info = get_exception_info($e);
                 mtrace("... REPORT FAILED " . $info->message);

@@ -15,19 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The customsql query edited event.
+ * The lsusql query edited event.
  *
- * @package    report_customsql
+ * @package    report_lsusql
  * @copyright  2014 The Open University
+ * @copyright  2022 Louisiana State University
+ * @copyright  2022 Robert Russo
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace report_customsql\event;
+namespace report_lsusql\event;
 
 /**
  * Event generated when a query is edited.
  *
- * @package report_customsql
+ * @package report_lsusql
  * @copyright 2014 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -35,11 +37,11 @@ class query_edited extends \core\event\base {
     protected function init() {
         $this->data['crud'] = 'u';
         $this->data['edulevel'] = self::LEVEL_OTHER;
-        $this->data['objecttable'] = 'report_customsql_queries';
+        $this->data['objecttable'] = 'report_lsusql_queries';
     }
 
     public static function get_name() {
-        return get_string('query_edited', 'report_customsql');
+        return get_string('query_edited', 'report_lsusql');
     }
 
     public function get_description() {
@@ -47,11 +49,11 @@ class query_edited extends \core\event\base {
     }
 
     public function get_url() {
-        return new \moodle_url('/report/customsql/view.php', array('id' => $this->objectid));
+        return new \moodle_url('/report/lsusql/view.php', array('id' => $this->objectid));
     }
 
     public function get_legacy_logdata() {
-        $url = '../report/customsql/view.php?id=' . $this->objectid;
-        return array(0, "report_customsql", 'edit query', $url, $this->objectid, $this->contextinstanceid);
+        $url = '../report/lsusql/view.php?id=' . $this->objectid;
+        return array(0, "report_lsusql", 'edit query', $url, $this->objectid, $this->contextinstanceid);
     }
 }

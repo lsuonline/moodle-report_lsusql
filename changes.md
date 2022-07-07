@@ -1,4 +1,9 @@
-# Change log for the Ad-hoc database queries report
+# Change log for the LSU Report API (Formerly Ad-hoc database queries)
+
+## Changes in LSU 1.0
+
+* This version supports limiting individual reports to their own subset of users.
+* This version supports exporting unescaped data.
 
 ## Changes in 4.2
 

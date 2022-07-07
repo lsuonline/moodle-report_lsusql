@@ -17,9 +17,11 @@
 /**
  * Definition of Report Custom SQL scheduled tasks.
  *
- * @package report_customsql
+ * @package report_lsusql
  * @category task
  * @copyright 2015 The Open University
+ * @copyright 2022 Louisiana State University
+ * @copyright 2022 Robert Russo
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $tasks = array(
     array(
-        'classname' => 'report_customsql\task\run_reports',
+        'classname' => 'report_lsusql\task\run_reports',
         'blocking' => 0,
         'minute' => '10',
         'hour' => '*',

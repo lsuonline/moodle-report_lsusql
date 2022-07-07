@@ -14,15 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace report_customsql\local;
+namespace report_lsusql\local;
 
 use moodle_url;
 
 /**
  * Query class.
  *
- * @package    report_customsql
+ * @package    report_lsusql
  * @copyright  2021 The Open Univesity
+ * @copyright  2022 Louisiana State University
+ * @copyright  2022 Robert Russo
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class query {
@@ -62,7 +64,7 @@ class query {
      * @return moodle_url View url.
      */
     public function get_url(): moodle_url {
-        return report_customsql_url('view.php', ['id' => $this->record->id]);
+        return report_lsusql_url('view.php', ['id' => $this->record->id]);
     }
 
     /** Get url to edit query.
@@ -76,7 +78,7 @@ class query {
             $param['returnurl'] = $returnurl->out_as_local_url(false);
         }
 
-        return report_customsql_url('edit.php', $param);
+        return report_lsusql_url('edit.php', $param);
     }
 
     /**
@@ -91,7 +93,7 @@ class query {
             $param['returnurl'] = $returnurl->out_as_local_url(false);
         }
 
-        return report_customsql_url('delete.php', $param);
+        return report_lsusql_url('delete.php', $param);
     }
 
     /**
@@ -100,7 +102,7 @@ class query {
      * @return string Time not.
      */
     public function get_time_note() {
-        return report_customsql_time_note($this->record, 'span');
+        return report_lsusql_time_note($this->record, 'span');
     }
 
     /**
@@ -109,7 +111,7 @@ class query {
      * @return string Capability text.
      */
     public function get_capability_string() {
-        $capabilities = report_customsql_capability_options();
+        $capabilities = report_lsusql_capability_options();
         return $capabilities[$this->record->capability];
     }
 
@@ -120,7 +122,7 @@ class query {
      * @return bool true if the user has this capability. Otherwise false.
      */
     public function can_edit(\context $context): bool {
-        return has_capability('report/customsql:definequeries', $context);
+        return has_capability('report/lsusql:definequeries', $context);
     }
 
     /**

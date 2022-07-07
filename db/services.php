@@ -17,20 +17,22 @@
 /**
  * Web service declarations.
  *
- * @package   report_customsql
+ * @package   report_lsusql
  * @copyright 2020 the Open University
+ * @copyright 2022 Louisiana State University
+ * @copyright 2022 Robert Russo
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
-    'report_customsql_get_users' => [
-        'classname' => 'report_customsql\external\get_users',
+    'report_lsusql_get_users' => [
+        'classname' => 'report_lsusql\external\get_users',
         'methodname' => 'execute',
         'classpath' => '',
         'description' => 'Use by form autocomplete for selecting users to receive emails.',
-        'capabilities' => 'report/customsql:definequeries',
+        'capabilities' => 'report/lsusql:definequeries',
         'type' => 'read',
         'ajax' => true,
     ],

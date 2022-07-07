@@ -15,21 +15,26 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Lang strings for report/customsql
+ * Lang strings for report/lsusql
  *
- * @package report_customsql
+ * @package report_lsusql
  * @copyright 2015 The Open University
+ * @copyright 2022 Louisiana State University
+ * @copyright 2022 Robert Russo
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 $string['addcategory'] = 'Add a new category';
 $string['addcategorydesc'] = 'To change a report\'s category, you must edit that report. Here you can edit category texts, delete a category or add a new category.';
-$string['addingareport'] = 'Adding an ad-hoc database query';
+$string['addingareport'] = 'Adding an LSU Report API query';
 $string['addreport'] = 'Add a new query';
 $string['addreportcategory'] = 'Add a new category for reports';
-$string['anyonewhocanveiwthisreport'] = 'Anyone who can view this report (report/customsql:view)';
+$string['anyonewhocanveiwthisreport'] = 'Anyone who can view this report (report/lsusql:view)';
 $string['archivedversions'] = 'Archived versions of this query';
 $string['at'] = 'at';
+$string['asapheader'] = 'Hourly';
+$string['asapheader_help'] = 'These reports will run with every single run of the scheduled task but will only store a new file hourly.';
+$string['automaticallyasap'] = 'Scheduled, hourly';
 $string['automaticallydaily'] = 'Scheduled, daily';
 $string['automaticallymonthly'] = 'Scheduled, on the first day of each month';
 $string['automaticallyweekly'] = 'Scheduled, on the first day of each week';
@@ -38,19 +43,19 @@ $string['availableto'] = 'Available to {$a}.';
 $string['backtoreportlist'] = 'Back to the list of queries';
 $string['backtocategory'] = 'Back to category \'{$a}\'';
 $string['category'] = 'Category';
-$string['categorycontent'] = '({$a->manual} on-demand, {$a->daily} daily, {$a->weekly} weekly, {$a->monthly} monthly)';
+$string['categorycontent'] = '({$a->manual} on-demand, {$a->asap} hourly, {$a->daily} daily, {$a->weekly} weekly, {$a->monthly} monthly)';
 $string['categoryexists'] = 'Category names must be unique, this name already exists';
 $string['categorynamex'] = 'Category name: {$a}';
 $string['changetheparameters'] = 'Change the parameters';
-$string['crontask'] = 'Ad-hoc database queries: run scheduled reports task';
+$string['crontask'] = 'LSU Report API: run scheduled reports task';
 $string['customdir'] = 'Export csv report to path / directory';
 $string['customdir_help'] = 'Files are exported in the CSV format to the file path specified. If a directory is specified the filename format will be reportid-timecreated.csv.';
 $string['customdirmustexist'] = 'The directory "{$a}" does not exist.';
 $string['customdirnotadirectory'] = 'The path "{$a}" is not a directory.';
 $string['customdirnotwritable'] = 'The directory "{$a}" is not writable.';
-$string['customsql:definequeries'] = 'Define custom queries';
-$string['customsql:managecategories'] = 'Define custom categories';
-$string['customsql:view'] = 'View custom queries report';
+$string['lsusql:definequeries'] = 'Define custom queries';
+$string['lsusql:managecategories'] = 'Define custom categories';
+$string['lsusql:view'] = 'View custom queries report';
 $string['dailyheader'] = 'Daily';
 $string['dailyheader_help'] = 'These queries are automatically run every day at the specified time. These links let you view the results that has already been accumulated.';
 $string['defaultcategory'] = 'Miscellaneous';
@@ -69,7 +74,7 @@ $string['downloadthisreportascsv'] = 'Download these results as CSV';
 $string['edit'] = 'Add/Edit';
 $string['editcategory'] = 'Update category';
 $string['editcategoryx'] = 'Edit category \'{$a}\'';
-$string['editingareport'] = 'Editing an ad-hoc database query';
+$string['editingareport'] = 'Editing an LSU Report API query';
 $string['editreportx'] = 'Edit query \'{$a}\'';
 $string['emailnumberofrows'] = 'Just the number of rows and the link';
 $string['emailresults'] = 'Put the results in the email body';
@@ -85,14 +90,14 @@ $string['emailsubjectxrows'] = 'Query {$a->name} [{$a->rows} rows]';
 $string['emailbody'] = 'Dear {$a}';
 $string['emailto'] = 'Automatically email to';
 $string['emailwhat'] = 'What to email';
-$string['enterparameters'] = 'Enter parameters for ad-hoc database query';
+$string['enterparameters'] = 'Enter parameters for LSU Report API query';
 $string['errordeletingcategory'] = '<p>Error deleting a query category.</p><p>It must be empty to delete it.</p>';
 $string['errordeletingreport'] = 'Error deleting a query.';
 $string['errorinsertingreport'] = 'Error inserting a query.';
 $string['errorupdatingreport'] = 'Error updating a query.';
 $string['invalidreportid'] = 'Invalid query id {$a}.';
 $string['lastexecuted'] = 'This query was last run on {$a->lastrun}. It took {$a->lastexecutiontime}s to run.';
-$string['messageprovider:notification'] = 'Ad-hoc database query notifications';
+$string['messageprovider:notification'] = 'LSU Report API query notifications';
 $string['managecategories'] = 'Manage report categories';
 $string['manual'] = 'On-demand';
 $string['manualheader'] = 'On-demand';
@@ -112,27 +117,27 @@ $string['note'] = 'Notes';
 $string['notrunyet'] = 'This query has not yet been run.';
 $string['onerow'] = 'The query returns one row, accumulate the results one row at a time';
 $string['parametervalue'] = '{$a->name}: {$a->value}';
-$string['pluginname'] = 'Ad-hoc database queries';
-$string['privacy:metadata:reportcustomsqlqueries'] = 'Ad-hoc database queries';
-$string['privacy:metadata:reportcustomsqlqueries:displayname'] = 'The name of the report as displayed in the UI';
-$string['privacy:metadata:reportcustomsqlqueries:description'] = 'A human-readable description of the query.';
-$string['privacy:metadata:reportcustomsqlqueries:descriptionformat'] = 'Query description text format';
-$string['privacy:metadata:reportcustomsqlqueries:querysql'] = 'The SQL to run to generate this report';
-$string['privacy:metadata:reportcustomsqlqueries:queryparams'] = 'The SQL parameters to generate this report';
-$string['privacy:metadata:reportcustomsqlqueries:querylimit'] = 'Limit the number of results returned';
-$string['privacy:metadata:reportcustomsqlqueries:capability'] = 'The capability that a user needs to have to run this report';
-$string['privacy:metadata:reportcustomsqlqueries:lastrun'] = 'When this report was last run';
-$string['privacy:metadata:reportcustomsqlqueries:lastexecutiontime'] = 'Time this report took to run last time it was executed, in milliseconds';
-$string['privacy:metadata:reportcustomsqlqueries:runable'] = 'Runable \'manual\', \'weekly\' or \'monthly\'';
-$string['privacy:metadata:reportcustomsqlqueries:singlerow'] = 'Only meaningful to set this scheduled reports. Means the report can only return one row of data, and the report builds up a row at a time';
-$string['privacy:metadata:reportcustomsqlqueries:at'] = 'The time for the daily report';
-$string['privacy:metadata:reportcustomsqlqueries:emailto'] = 'A comma-separated list of user ids';
-$string['privacy:metadata:reportcustomsqlqueries:emailwhat'] = 'A list of email options in a select menu';
-$string['privacy:metadata:reportcustomsqlqueries:categoryid'] = 'The category ID from report_customsql_categories table';
-$string['privacy:metadata:reportcustomsqlqueries:customdir'] = 'Export csv report to path / directory';
-$string['privacy:metadata:reportcustomsqlqueries:usermodified'] = 'User modified';
-$string['privacy:metadata:reportcustomsqlqueries:timecreated'] = 'Time created';
-$string['privacy:metadata:reportcustomsqlqueries:timemodified'] = 'Time modified';
+$string['pluginname'] = 'LSU Report API';
+$string['privacy:metadata:reportlsusqlqueries'] = 'LSU Report API';
+$string['privacy:metadata:reportlsusqlqueries:displayname'] = 'The name of the report as displayed in the UI';
+$string['privacy:metadata:reportlsusqlqueries:description'] = 'A human-readable description of the query.';
+$string['privacy:metadata:reportlsusqlqueries:descriptionformat'] = 'Query description text format';
+$string['privacy:metadata:reportlsusqlqueries:querysql'] = 'The SQL to run to generate this report';
+$string['privacy:metadata:reportlsusqlqueries:queryparams'] = 'The SQL parameters to generate this report';
+$string['privacy:metadata:reportlsusqlqueries:querylimit'] = 'Limit the number of results returned';
+$string['privacy:metadata:reportlsusqlqueries:capability'] = 'The capability that a user needs to have to run this report';
+$string['privacy:metadata:reportlsusqlqueries:lastrun'] = 'When this report was last run';
+$string['privacy:metadata:reportlsusqlqueries:lastexecutiontime'] = 'Time this report took to run last time it was executed, in milliseconds';
+$string['privacy:metadata:reportlsusqlqueries:runable'] = 'Runable \'manual\', \'weekly\' or \'monthly\'';
+$string['privacy:metadata:reportlsusqlqueries:singlerow'] = 'Only meaningful to set this scheduled reports. Means the report can only return one row of data, and the report builds up a row at a time';
+$string['privacy:metadata:reportlsusqlqueries:at'] = 'The time for the daily report';
+$string['privacy:metadata:reportlsusqlqueries:emailto'] = 'A comma-separated list of user ids';
+$string['privacy:metadata:reportlsusqlqueries:emailwhat'] = 'A list of email options in a select menu';
+$string['privacy:metadata:reportlsusqlqueries:categoryid'] = 'The category ID from report_lsusql_categories table';
+$string['privacy:metadata:reportlsusqlqueries:customdir'] = 'Export csv report to path / directory';
+$string['privacy:metadata:reportlsusqlqueries:usermodified'] = 'User modified';
+$string['privacy:metadata:reportlsusqlqueries:timecreated'] = 'Time created';
+$string['privacy:metadata:reportlsusqlqueries:timemodified'] = 'Time modified';
 $string['privacy_you'] = 'You';
 $string['privacy_somebodyelse'] = 'Somebody else';
 $string['query_deleted'] = 'Query deleted';
@@ -192,4 +197,16 @@ $string['verifyqueryandupdate'] = 'Verify the Query SQL text and update the form
 $string['weeklyheader'] = 'Weekly';
 $string['weeklyheader_help'] = 'These queries are automatically run on the first day of each week, to report on the previous week. These links let you view the results that has already been accumulated.';
 $string['whocanaccess'] = 'Who can access this query';
-$string['privacy:metadata'] = 'The Ad-hoc database queries plugin does not store any personal data.';
+$string['privacy:metadata'] = 'The LSU Report API plugin does not store any personal data.';
+
+// LSU.
+$string['userlimit'] = 'Limit to these users';
+$string['userlimit_help'] = 'Add a comma seperated list of moodle usernames. Case must match the Moodle username. Leave empty for no additional limits. Example: user1,user2,user3';
+$string['donotescape'] = 'Do not escape the output of this query when saved via CLI';
+$string['donotescapemore'] = 'Do Not Escape &mdash; Very useful for specially formatted csv reports.<br><strong>Ignored for web downloads and external webservice consumption.</strong>';
+$string['badwords'] = 'Exceptions to prohibited words';
+$string['badwords_help'] = 'Here you can add a colon (:) separated list of key,value pairs of exceptions to the banned words list and their "%%X%%" code where "X" is the letter you choose in the key,value pair. These banned words include ALTER, CREATE, DELETE, DROP, GRANT, INSERT, INTO, TRUNCATE, and UPDATE. These are independent of case. <br />Please make note of whatever case you might need in your results and the case of your code. To return these words in your query results, use the appropriate "%%X%%" code in place of the banned word.<br />Example: Entering the key,value pair of <strong>M,update:I,create</strong> will allow you to use <strong>%%M%%</strong> to return <strong>"update"</strong> and <strong>%%I%%</strong> to return <strong>"create"</strong> in your query results.';
+$string['noaccess'] = 'You are not allowed to view or download this report. Please contact your report administrator for assistance.';
+$string['invalidformat'] = 'You are not allowed to download this data via webservices in the requested dataformat.';
+$string['dataformats'] = 'Allowed Data Formats';
+$string['dataformats_desc'] = 'Dataformats you allow webservice clients to download.';

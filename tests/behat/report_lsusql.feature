@@ -1,13 +1,13 @@
-@ou @ou_vle @report @report_customsql
-Feature: Ad-hoc database queries report
+@ou @ou_vle @report @report_lsusql
+Feature: LSU Report API report
   As an administrator
   In order to understand what is going on in my Moodle site
   I need to be able to run arbitrary queries against the database
 
-  Scenario: Create an Ad-hoc database query
+  Scenario: Create an LSU Report API query
     When I log in as "admin"
-    And the Ad-hoc database queries thinks the time is "2021-05-10 18:00:00"
-    And I navigate to "Reports > Ad-hoc database queries" in site administration
+    And the LSU Report API thinks the time is "2021-05-10 18:00:00"
+    And I navigate to "Reports > LSU Report API" in site administration
     And I press "Add a new query"
     And I set the following fields to these values:
       | Query name  | Test query                                    |
@@ -25,7 +25,7 @@ Feature: Ad-hoc database queries report
     And I should see "Last modified: Monday, 10 May 2021, 6:00 PM"
     And I should see "Modified by: Admin User"
 
-  Scenario: Edit an Ad-hoc database query
+  Scenario: Edit an LSU Report API query
     Given the following "users" exist:
       | username | firstname | lastname | email               |
       | mamager1 | Manager   | 1        | manager@example.com |
@@ -37,8 +37,8 @@ Feature: Ad-hoc database queries report
       | timemodified | ## 2021-05-10 18:00:00 ##                     |
       | usermodified | mamager1                                      |
     When I log in as "admin"
-    And the Ad-hoc database queries thinks the time is "2021-05-10 19:00:00"
-    And I navigate to "Reports > Ad-hoc database queries" in site administration
+    And the LSU Report API thinks the time is "2021-05-10 19:00:00"
+    And I navigate to "Reports > LSU Report API" in site administration
     And I follow "Edit query 'Test query'"
     And the following fields match these values:
       | Query name  | Test query                                    |
@@ -57,18 +57,18 @@ Feature: Ad-hoc database queries report
     And I should see "Last modified: Monday, 10 May 2021, 7:00 PM"
     And I should see "Modified by: Admin User"
 
-  Scenario: Delete an Ad-hoc database query
+  Scenario: Delete an LSU Report API query
     Given the following custom sql report exists:
       | name        | Test query                                    |
       | description | Display the Moodle internal version number.   |
       | querysql    | SELECT * FROM {config} WHERE name = 'version' |
     When I log in as "admin"
-    And I navigate to "Reports > Ad-hoc database queries" in site administration
+    And I navigate to "Reports > LSU Report API" in site administration
     And I follow "Delete query 'Test query'"
     And I press "Yes"
     Then I should not see "Test query"
 
-  Scenario: View an Ad-hoc database query that returns no data
+  Scenario: View an LSU Report API query that returns no data
     Given the following custom sql report exists:
       | name     | Test query                               |
       | querysql | SELECT * FROM {config} WHERE name = '-1' |
@@ -76,9 +76,9 @@ Feature: Ad-hoc database queries report
     And I view the "Test query" custom sql report
     Then I should see "This query did not return any data."
 
-  Scenario: Create an Ad-hoc database queries category
+  Scenario: Create an LSU Report API category
     When I log in as "admin"
-    And I navigate to "Reports > Ad-hoc database queries" in site administration
+    And I navigate to "Reports > LSU Report API" in site administration
     And I press "Manage report categories"
     And I press "Add a new category"
     And I set the field "Category name" to "Category 1"
@@ -86,10 +86,10 @@ Feature: Ad-hoc database queries report
     Then I should see "Category 1"
 
   @javascript
-  Scenario: Create an Ad-hoc database query in a custom category
+  Scenario: Create an LSU Report API query in a custom category
     Given the custom sql report category "Special reports" exists:
     When I log in as "admin"
-    And I navigate to "Reports > Ad-hoc database queries" in site administration
+    And I navigate to "Reports > LSU Report API" in site administration
     And I follow "Special reports"
     And I should see "No queries available"
     And I press "Add a new query"
@@ -98,7 +98,7 @@ Feature: Ad-hoc database queries report
       | Query name | Test query                                    |
       | Query SQL  | SELECT * FROM {config} WHERE name = 'version' |
     And I press "Save changes"
-    And I navigate to "Reports > Ad-hoc database queries" in site administration
+    And I navigate to "Reports > LSU Report API" in site administration
     And I follow "Special reports"
     # Also test expand/collapse while we are here.
     Then I should see "Test query"
@@ -110,11 +110,11 @@ Feature: Ad-hoc database queries report
     And I should not see "Expand all"
     And I should see "Collapse all"
 
-  Scenario: View a category and add an ad-hoc database query inside a category
+  Scenario: View a category and add an LSU Report API query inside a category
     Given the custom sql report category "Category 1" exists:
     And the custom sql report category "Category 2" exists:
     When I log in as "admin"
-    And I navigate to "Reports > Ad-hoc database queries" in site administration
+    And I navigate to "Reports > LSU Report API" in site administration
     And I follow "Show only Category 2"
     Then I should see "Category 2"
     And I should see "No queries available"
@@ -129,10 +129,10 @@ Feature: Ad-hoc database queries report
     And I follow "Back to category 'Category 2'"
     And I should see "Test query"
 
-  Scenario: Delete an empty Ad-hoc database queries category
+  Scenario: Delete an empty LSU Report API category
     Given the custom sql report category "Special reports" exists:
     When I log in as "admin"
-    And I navigate to "Reports > Ad-hoc database queries" in site administration
+    And I navigate to "Reports > LSU Report API" in site administration
     And I press "Manage report categories"
     And I follow "Delete category 'Special reports'"
     And I press "Yes"
@@ -156,23 +156,23 @@ Feature: Ad-hoc database queries report
     When I log in as "admin"
     And I view the "Formatting test" custom sql report
     Then I should see "Formatting test"
-    And "Not a date" row "String date" column of "report_customsql_results" table should contain "Not a date"
-    And "Not a date" row "Date date" column of "report_customsql_results" table should contain "2018-11-22"
-    And "Not a date" row "URL to link" column of "report_customsql_results" table should contain "http://example.com/1"
-    And "Not a date" row "Link text" column of "report_customsql_results" table should contain "This is a link"
-    And "Not a date" row "Not link" column of "report_customsql_results" table should contain "Non-link, invalid URL"
-    And "Not a date" row "Just a link url" column of "report_customsql_results" table should contain "http://example.com/3"
-    And "Not a date" row "HTML should be escaped" column of "report_customsql_results" table should contain "<b>Raw HTML</b>"
-    And "http://example.com/1" "link" should exist in the "report_customsql_results" "table"
-    And "This is a link" "link" should exist in the "report_customsql_results" "table"
-    And "Non-link, invalid URL" "link" should not exist in the "report_customsql_results" "table"
-    And "http://example.com/3" "link" should exist in the "report_customsql_results" "table"
-    And I should not see "Link text link url" in the "report_customsql_results" "table"
+    And "Not a date" row "String date" column of "report_lsusql_results" table should contain "Not a date"
+    And "Not a date" row "Date date" column of "report_lsusql_results" table should contain "2018-11-22"
+    And "Not a date" row "URL to link" column of "report_lsusql_results" table should contain "http://example.com/1"
+    And "Not a date" row "Link text" column of "report_lsusql_results" table should contain "This is a link"
+    And "Not a date" row "Not link" column of "report_lsusql_results" table should contain "Non-link, invalid URL"
+    And "Not a date" row "Just a link url" column of "report_lsusql_results" table should contain "http://example.com/3"
+    And "Not a date" row "HTML should be escaped" column of "report_lsusql_results" table should contain "<b>Raw HTML</b>"
+    And "http://example.com/1" "link" should exist in the "report_lsusql_results" "table"
+    And "This is a link" "link" should exist in the "report_lsusql_results" "table"
+    And "Non-link, invalid URL" "link" should not exist in the "report_lsusql_results" "table"
+    And "http://example.com/3" "link" should exist in the "report_lsusql_results" "table"
+    And I should not see "Link text link url" in the "report_lsusql_results" "table"
     And I should see "This report has 1 rows."
 
-  Scenario: Create and run an Ad-hoc database query that has parameters
+  Scenario: Create and run an LSU Report API query that has parameters
     When I log in as "admin"
-    And I navigate to "Reports > Ad-hoc database queries" in site administration
+    And I navigate to "Reports > LSU Report API" in site administration
     And I press "Add a new query"
     And I set the following fields to these values:
       | Query name | Find user                                       |
@@ -190,7 +190,7 @@ Feature: Ad-hoc database queries report
     And I should see "moodle@example.com"
     And I should see "This report has 1 rows."
 
-  Scenario: Link directly to an Ad-hoc database query that has parameters
+  Scenario: Link directly to an LSU Report API query that has parameters
     Given the following custom sql report exists:
       | name     | Find user                                       |
       | querysql | SELECT * FROM {user} WHERE username = :username |
@@ -203,7 +203,7 @@ Feature: Ad-hoc database queries report
     And I should see "moodle@example.com"
     And I should see "This report has 1 rows."
 
-  Scenario: Link directly to an Ad-hoc database query giving some parameters
+  Scenario: Link directly to an LSU Report API query giving some parameters
     Given the following custom sql report exists:
       | name     | Find user                                                                  |
       | querysql | SELECT * FROM {user} WHERE firstname = :firstname AND lastname = :lastname |
@@ -223,9 +223,9 @@ Feature: Ad-hoc database queries report
 
   Scenario: Test reporting when a query exceeds the limit
     Given the following config values are set as admin:
-      | querylimitdefault | 1 | report_customsql |
+      | querylimitdefault | 1 | report_lsusql |
     When I log in as "admin"
-    And I navigate to "Reports > Ad-hoc database queries" in site administration
+    And I navigate to "Reports > LSU Report API" in site administration
     And I press "Add a new query"
     And I set the following fields to these values:
       | Query name  | Test query                                                                                   |
@@ -235,10 +235,10 @@ Feature: Ad-hoc database queries report
     Then I should see "Test query"
     And I should see "This query reached the limit of 1 rows. Some rows may have been omitted from the end."
 
-  Scenario: View an Ad-hoc database query that returns data that confuses PHP CSV parsing
+  Scenario: View an LSU Report API query that returns data that confuses PHP CSV parsing
     Given the following custom sql report exists:
       | name     | Test query                                    |
       | querysql | SELECT CHR(92) AS Backslash, CHR(44) AS Comma |
     When I log in as "admin"
     And I view the "Test query" custom sql report
-    Then "\" row "Comma" column of "report_customsql_results" table should contain ","
+    Then "\" row "Comma" column of "report_lsusql_results" table should contain ","

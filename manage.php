@@ -17,52 +17,54 @@
 /**
  * Custom SQL report categories.
  *
- * Users with the report/customsql:managequeries capability can create and edit
+ * Users with the report/lsusql:managequeries capability can create and edit
  * the custom categories.
  *
  * This page shows the list of categories, with edit icons, and an add new button
- * if you have the report/customsql:managequeries capability.
+ * if you have the report/lsusql:managequeries capability.
  *
- * @package report_customsql
+ * @package report_lsusql
  * @copyright 2013 The Open University
+ * @copyright 2022 Louisiana State University
+ * @copyright 2022 Robert Russo
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 require_once($CFG->libdir . '/adminlib.php');
 
-admin_externalpage_setup('report_customsql', '', null, '/report/customsql/manage.php');
+admin_externalpage_setup('report_lsusql', '', null, '/report/lsusql/manage.php');
 $context = context_system::instance();
-require_capability('report/customsql:managecategories', $context);
-$PAGE->navbar->add(get_string('managecategories', 'report_customsql'), report_customsql_url('manage.php'));
+require_capability('report/lsusql:managecategories', $context);
+$PAGE->navbar->add(get_string('managecategories', 'report_lsusql'), report_lsusql_url('manage.php'));
 
-echo $OUTPUT->header() . $OUTPUT->heading(get_string('managecategories', 'report_customsql'));
+echo $OUTPUT->header() . $OUTPUT->heading(get_string('managecategories', 'report_lsusql'));
 
-$categories = $DB->get_records('report_customsql_categories', null, 'name ASC');
+$categories = $DB->get_records('report_lsusql_categories', null, 'name ASC');
 
-echo html_writer::tag('p', get_string('addcategorydesc', 'report_customsql'));
+echo html_writer::tag('p', get_string('addcategorydesc', 'report_lsusql'));
 
 if (!empty($categories)) {
     foreach ($categories as $category) {
         echo html_writer::start_tag('div');
 
-        echo ' ' . html_writer::link(report_customsql_url('category.php', ['id' => $category->id]),
-                format_string($category->name) . ' ', array('class' => 'report_customsql')) .
+        echo ' ' . html_writer::link(report_lsusql_url('category.php', ['id' => $category->id]),
+                format_string($category->name) . ' ', array('class' => 'report_lsusql')) .
                 html_writer::tag('a', $OUTPUT->pix_icon('t/edit', get_string('edit')),
-                array('title' => get_string('editcategoryx', 'report_customsql', format_string($category->name)),
-                        'href' => report_customsql_url('addcategory.php?id=' . $category->id)));
+                array('title' => get_string('editcategoryx', 'report_lsusql', format_string($category->name)),
+                        'href' => report_lsusql_url('addcategory.php?id=' . $category->id)));
 
-        if ($category->id != 1 && !$DB->record_exists('report_customsql_queries', ['categoryid' => $category->id])) {
+        if ($category->id != 1 && !$DB->record_exists('report_lsusql_queries', ['categoryid' => $category->id])) {
             echo ' ' .  html_writer::tag('a', $OUTPUT->pix_icon('t/delete', get_string('delete')),
-                    array('title' => get_string('deletecategoryx', 'report_customsql', format_string($category->name)),
-                            'href' => report_customsql_url('categorydelete.php?id=' . $category->id)));
+                    array('title' => get_string('deletecategoryx', 'report_lsusql', format_string($category->name)),
+                            'href' => report_lsusql_url('categorydelete.php?id=' . $category->id)));
         }
 
         echo html_writer::end_tag('div');
     }
 }
 
-echo $OUTPUT->single_button(report_customsql_url('addcategory.php'),
-        get_string('addcategory', 'report_customsql'));
+echo $OUTPUT->single_button(report_lsusql_url('addcategory.php'),
+        get_string('addcategory', 'report_lsusql'));
 
 echo $OUTPUT->footer();

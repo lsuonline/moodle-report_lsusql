@@ -16,17 +16,17 @@
 /*
  * JavaScript to expand/collapse sections.
  *
- * @package report_customsql
+ * @package report_lsusql
  * @copyright 2014 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
- * @module report_customsql/reportcategories
+ * @module report_lsusql/reportcategories
  */
 define(['jquery'], function($) {
     /**
-     * @alias module:report_customsql/reportcategories
+     * @alias module:report_lsusql/reportcategories
      */
     var t = {
 

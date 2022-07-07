@@ -17,17 +17,19 @@
 /**
  * version.php file for the Custom SQL admin report.
  *
- * @package   report_customsql
+ * @package   report_lsusql
  * @copyright 2015 The Open University
+ * @copyright 2022 Louisiana State University
+ * @copyright 2022 Robert Russo
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022031800;
+$plugin->version   = 2022063000;
 $plugin->requires  = 2020061500;
-$plugin->component = 'report_customsql';
+$plugin->component = 'report_lsusql';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '4.2 for Moodle 3.9+';
+$plugin->release   = '1.0 for Moodle 3.9+';
 
 $plugin->outestssufficient = true;

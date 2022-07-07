@@ -14,21 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace report_customsql\output;
+namespace report_lsusql\output;
 
 use context;
 use moodle_url;
 use renderable;
-use report_customsql\local\query;
-use report_customsql\local\category;
+use report_lsusql\local\query;
+use report_lsusql\local\category;
 use templatable;
 
 
 /**
  * Renderable class to show the query item in category page.
  *
- * @package    report_customsql
+ * @package    report_lsusql
  * @copyright  2021 The Open University
+ * @copyright  2022 Louisiana State University
+ * @copyright  2022 Robert Russo
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class category_query implements renderable, templatable {

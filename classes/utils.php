@@ -14,13 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace report_customsql;
+namespace report_lsusql;
 
 /**
- * Static utility methods to support the report_customsql module.
+ * Static utility methods to support the report_lsusql module.
  *
- * @package report_customsql
+ * @package report_lsusql
  * @copyright 2021 The Open University
+ * @copyright 2022 Louisiana State University
+ * @copyright 2022 Robert Russo
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -34,7 +36,7 @@ class utils {
      */
     public static function time(): int {
         if ((defined('BEHAT_SITE_RUNNING') || PHPUNIT_TEST) &&
-                $time = get_config('report_customsql', 'behat_fixed_time')) {
+                $time = get_config('report_lsusql', 'behat_fixed_time')) {
             return $time;
         } else {
             return time();

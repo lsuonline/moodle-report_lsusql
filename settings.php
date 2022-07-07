@@ -17,12 +17,28 @@
 /**
  * Admin settings tree setup for the Custom SQL admin report.
  *
- * @package report_customsql
+ * @package report_lsusql
  * @copyright 2011 The Open University
+ * @copyright 2022 Louisiana State University
+ * @copyright 2022 Robert Russo
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
+
+// Grab this for getting the dataformat plugins.
+require_once($CFG->libdir . '/classes/plugin_manager.php');
+
+// Set the enabled dataformats.
+$dformats = core_plugin_manager::instance()->get_plugins_of_type('dataformat');
+
+// Build an array of dataformats for use in settings.
+$dfoptions = array();
+foreach ($dformats as $key => $dformat) {
+    if ($dformat->is_enabled()) {
+        $dfoptions[$key] = $dformat->name;
+    }
+}
 
 if ($ADMIN->fulltree) {
     // Start of week, used for the day to run weekly reports.
@@ -34,21 +50,29 @@ if ($ADMIN->fulltree) {
     $default = \core_calendar\type_factory::get_calendar_instance()->get_starting_weekday();
 
     // Setting this option to -1 will use the value from the site calendar.
-    $options = [-1 => get_string('startofweek_default', 'report_customsql', $days[$default])] + $days;
-    $settings->add(new admin_setting_configselect('report_customsql/startwday',
-            get_string('startofweek', 'report_customsql'),
-            get_string('startofweek_desc', 'report_customsql'), -1, $options));
+    $options = [-1 => get_string('startofweek_default', 'report_lsusql', $days[$default])] + $days;
+    $settings->add(new admin_setting_configselect('report_lsusql/startwday',
+            get_string('startofweek', 'report_lsusql'),
+            get_string('startofweek_desc', 'report_lsusql'), -1, $options));
 
-    $settings->add(new admin_setting_configtext_with_maxlength('report_customsql/querylimitdefault',
-            get_string('querylimitdefault', 'report_customsql'),
-            get_string('querylimitdefault_desc', 'report_customsql'), 5000, PARAM_INT, null, 10));
+    $settings->add(new admin_setting_configmultiselect('report_lsusql/dataformats',
+            get_string('dataformats', 'report_lsusql'),
+            get_string('dataformats_desc', 'report_lsusql'), array('csv'=>'csv'), $dfoptions));
 
-    $settings->add(new admin_setting_configtext_with_maxlength('report_customsql/querylimitmaximum',
-            get_string('querylimitmaximum', 'report_customsql'),
-            get_string('querylimitmaximum_desc', 'report_customsql'), 5000, PARAM_INT, null, 10));
+    $settings->add(new admin_setting_configtext_with_maxlength('report_lsusql/querylimitdefault',
+            get_string('querylimitdefault', 'report_lsusql'),
+            get_string('querylimitdefault_desc', 'report_lsusql'), 5000, PARAM_INT, null, 10));
+
+    $settings->add(new admin_setting_configtext_with_maxlength('report_lsusql/querylimitmaximum',
+            get_string('querylimitmaximum', 'report_lsusql'),
+            get_string('querylimitmaximum_desc', 'report_lsusql'), 5000, PARAM_INT, null, 10));
+
+    $settings->add(new admin_setting_configtext('report_lsusql_badwordsexception',
+            get_string('badwords', 'report_lsusql'),
+            get_string('badwords_help', 'report_lsusql'), ''));
 }
 
-$ADMIN->add('reports', new admin_externalpage('report_customsql',
-        get_string('pluginname', 'report_customsql'),
-        new moodle_url('/report/customsql/index.php'),
-        'report/customsql:view'));
+$ADMIN->add('reports', new admin_externalpage('report_lsusql',
+        get_string('pluginname', 'report_lsusql'),
+        new moodle_url('/report/lsusql/index.php'),
+        'report/lsusql:view'));

@@ -14,21 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace report_customsql\output;
+namespace report_lsusql\output;
 
 use context;
 use moodle_url;
 use renderable;
 use templatable;
 use renderer_base;
-use report_customsql\local\query as report_query;
-use report_customsql\local\category as report_category;
+use report_lsusql\local\query as report_query;
+use report_lsusql\local\category as report_category;
 
 /**
  * Category renderable class.
  *
- * @package    report_customsql
+ * @package    report_lsusql
  * @copyright  2021 The Open University
+ * @copyright  2022 Louisiana State University
+ * @copyright  2022 Robert Russo
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class category implements renderable, templatable {
@@ -97,17 +99,17 @@ class category implements renderable, templatable {
 
             $querygroups[] = [
                 'type' => $querygroup['type'],
-                'title' => get_string($querygroup['type'] . 'header', 'report_customsql'),
-                'helpicon' => $output->help_icon($querygroup['type'] . 'header', 'report_customsql'),
+                'title' => get_string($querygroup['type'] . 'header', 'report_lsusql'),
+                'helpicon' => $output->help_icon($querygroup['type'] . 'header', 'report_lsusql'),
                 'queries' => $queries
             ];
         }
 
         $addquerybutton = '';
-        if ($this->addnewquerybtn && has_capability('report/customsql:definequeries', $this->context)) {
-            $addnewqueryurl = report_customsql_url('edit.php', ['categoryid' => $this->category->get_id(),
+        if ($this->addnewquerybtn && has_capability('report/lsusql:definequeries', $this->context)) {
+            $addnewqueryurl = report_lsusql_url('edit.php', ['categoryid' => $this->category->get_id(),
                 'returnurl' => $this->returnurl->out_as_local_url(false)]);
-            $addquerybutton = $output->single_button($addnewqueryurl, get_string('addreport', 'report_customsql'), 'post',
+            $addquerybutton = $output->single_button($addnewqueryurl, get_string('addreport', 'report_lsusql'), 'post',
                                         ['class' => 'mb-1']);
         }
 
@@ -149,6 +151,6 @@ class category implements renderable, templatable {
             $params = ['showcat' => $categoryid];
         }
 
-        return report_customsql_url('index.php', $params)->out(false);
+        return report_lsusql_url('index.php', $params)->out(false);
     }
 }

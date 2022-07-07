@@ -16,7 +16,7 @@
 /**
  * JavaScript module to work with the auto-complete of users.
  *
- * @module     report_customsql/userselector
+ * @module     report_lsusql/userselector
  * @copyright  2020 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -34,7 +34,7 @@ import Templates from 'core/templates';
  */
 export function transport(selector, query, success, failure) {
     Ajax.call([{
-        methodname: 'report_customsql_get_users',
+        methodname: 'report_lsusql_get_users',
         args: {
             query: query,
             capability: document.getElementById('id_capability').value
@@ -44,7 +44,7 @@ export function transport(selector, query, success, failure) {
     .then((results) => {
         // For each user in the result, render the display, and set it on the _label field.
         return Promise.all(results.map((user) => {
-            return Templates.render('report_customsql/form-user-selector-suggestion', user)
+            return Templates.render('report_lsusql/form-user-selector-suggestion', user)
                 .then((html) => {
                     user._label = html;
                     return user;

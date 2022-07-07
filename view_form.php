@@ -17,8 +17,10 @@
 /**
  * Form for viewing/entering parameters for a custom SQL report.
  *
- * @package report_customsql
+ * @package report_lsusql
  * @copyright 2009 The Open University
+ * @copyright 2022 Louisiana State University
+ * @copyright 2022 Robert Russo
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -33,20 +35,20 @@ require_once(dirname(__FILE__) . '/locallib.php');
  * @copyright © 2009 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class report_customsql_view_form extends moodleform {
+class report_lsusql_view_form extends moodleform {
     public function definition() {
         $mform = $this->_form;
 
-        $mform->addElement('header', 'heading', get_string('queryparameters', 'report_customsql'));
+        $mform->addElement('header', 'heading', get_string('queryparameters', 'report_lsusql'));
 
         foreach ($this->_customdata as $queryparam => $formparam) {
-            $type = report_customsql_get_element_type($queryparam);
+            $type = report_lsusql_get_element_type($queryparam);
             $mform->addElement($type, $formparam, str_replace('_', ' ', $queryparam));
             if ($type == 'text') {
                 $mform->setType($formparam, PARAM_RAW);
             }
         }
 
-        $this->add_action_buttons(true, get_string('runquery', 'report_customsql'));
+        $this->add_action_buttons(true, get_string('runquery', 'report_lsusql'));
     }
 }

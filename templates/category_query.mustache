@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template report_customsql/category_query
+    @template report_lsusql/category_query
 
     Moodle template for the list of valid options in an autocomplate form element.
 
@@ -34,16 +34,16 @@
     Example context (json):
     {
       "displayname": "Query 1",
-      "url": "http://example.com/report/customsql/view.php?id=1",
+      "url": "http://example.com/report/lsusql/view.php?id=1",
       "canedit": true,
       "timenote": "<span class='admin_note'>This query was last run on Monday, 30 August 2021, 5:30 PM.</span>",
       "capability": "Only administrators (moodle/site:config)",
       "editbutton": {
-        "url": "http://example.com/report/customsql/edit.php?id=1",
+        "url": "http://example.com/report/lsusql/edit.php?id=1",
         "img": "Edit button img"
        },
        "deletebutton": {
-         "url": "http://example.com/green/report/customsql/delete.php?id=1",
+         "url": "http://example.com/green/report/lsusql/delete.php?id=1",
          "img": "Delete button img"
        }
     }
@@ -52,14 +52,14 @@
 <p>
     <a href="{{url}}">{{{displayname}}}</a> {{{timenote}}}
     {{#canedit}}
-        <span class="admin_note">{{#str}}availableto, report_customsql, {{capability}} {{/str}}</span>
+        <span class="admin_note">{{#str}}availableto, report_lsusql, {{capability}} {{/str}}</span>
         {{#editbutton}}
-            <a href="{{url}}" title="{{#str}}editreportx, report_customsql, {{displayname}}{{/str}}">
+            <a href="{{url}}" title="{{#str}}editreportx, report_lsusql, {{displayname}}{{/str}}">
                 {{{img}}}
             </a>
         {{/editbutton}}
         {{#deletebutton}}
-            <a href="{{url}}" title="{{#str}}deletereportx, report_customsql, {{{displayname}}}{{/str}}">
+            <a href="{{url}}" title="{{#str}}deletereportx, report_lsusql, {{{displayname}}}{{/str}}">
                 {{{img}}}
             </a>
         {{/deletebutton}}

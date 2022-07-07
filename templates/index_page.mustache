@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template report_customsql/index_page
+    @template report_lsusql/index_page
 
     Moodle template for the list of valid options in an autocomplate form element.
 
@@ -36,7 +36,7 @@
     }
 }}
 {{#expandable}}
-    {{>report_customsql/expand_collapse_link}}
+    {{>report_lsusql/expand_collapse_link}}
 {{/expandable}}
 
 {{#categories}}
@@ -44,14 +44,14 @@
 {{/categories}}
 
 {{#expandcollapselinkattheend}}
-    {{>report_customsql/expand_collapse_link}}
+    {{>report_lsusql/expand_collapse_link}}
 {{/expandcollapselinkattheend}}
 
 {{{addquerybutton}}}
 {{{managecategorybutton}}}
 
 {{#js}}
-    require(['report_customsql/reportcategories'], function(reportcategories) {
+    require(['report_lsusql/reportcategories'], function(reportcategories) {
         reportcategories.init();
     });
 {{/js}}

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 
-namespace report_customsql\external;
+namespace report_lsusql\external;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -27,7 +27,7 @@ require_once($CFG->dirroot . '/webservice/tests/helpers.php');
 /**
  * Tests for the get_users web service.
  *
- * @package   report_customsql
+ * @package   report_lsusql
  * @category  external
  * @copyright 2020 The Open University
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -47,8 +47,8 @@ class external_get_users_test extends \externallib_advanced_testcase {
         $coursecreateorroleid = $DB->get_field('role', 'id', ['shortname' => 'coursecreator']);
 
         role_change_permission($managerroleid, $context, 'moodle/site:viewreports', CAP_ALLOW);
-        role_change_permission($managerroleid, $context, 'report/customsql:view', CAP_ALLOW);
-        role_change_permission($coursecreateorroleid, $context, 'report/customsql:view', CAP_ALLOW);
+        role_change_permission($managerroleid, $context, 'report/lsusql:view', CAP_ALLOW);
+        role_change_permission($coursecreateorroleid, $context, 'report/lsusql:view', CAP_ALLOW);
 
         // Create some users.
         $DB->update_record('user', (object)
@@ -109,11 +109,11 @@ class external_get_users_test extends \externallib_advanced_testcase {
         ], $result);
     }
 
-    public function test_get_users_customsql_view() {
+    public function test_get_users_lsusql_view() {
         [$admin, $manager, $coursecreateor] = $this->setup_users();
         $defaultuserimage = 'https://www.example.com/moodle/theme/image.php/_s/boost/core/1/u/f2';
 
-        $result = get_users::execute('', 'report/customsql:view');
+        $result = get_users::execute('', 'report/lsusql:view');
         $result = \external_api::clean_returnvalue(get_users::execute_returns(), $result);
 
         $this->assertEquals([
@@ -145,7 +145,7 @@ class external_get_users_test extends \externallib_advanced_testcase {
         [, $manager] = $this->setup_users();
         $defaultuserimage = 'https://www.example.com/moodle/theme/image.php/_s/boost/core/1/u/f2';
 
-        $result = get_users::execute('Man', 'report/customsql:view');
+        $result = get_users::execute('Man', 'report/lsusql:view');
         $result = \external_api::clean_returnvalue(get_users::execute_returns(), $result);
 
         $this->assertEquals([
@@ -163,7 +163,7 @@ class external_get_users_test extends \externallib_advanced_testcase {
         [$admin] = $this->setup_users();
         $defaultuserimage = 'https://www.example.com/moodle/theme/image.php/_s/boost/core/1/u/f2';
 
-        $result = get_users::execute('n U', 'report/customsql:view');
+        $result = get_users::execute('n U', 'report/lsusql:view');
         $result = \external_api::clean_returnvalue(get_users::execute_returns(), $result);
 
         $this->assertEquals([

@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template report_customsql/category
+    @template report_lsusql/category
 
     Template to render a category.
 
@@ -35,13 +35,14 @@
         "expandable": false,
         "show": "shown",
         "showonlythislink": "true",
-        "url": "https://example.com/report_customsql/category.php?id=1",
-        "linkref": "https://example.com/report_customsql/index.php?hidecat=1",
+        "url": "https://example.com/report_lsusql/category.php?id=1",
+        "linkref": "https://example.com/report_lsusql/index.php?hidecat=1",
         "statistic": {
             "manual": 1,
-            "daily": 2,
-            "weekly": 3,
-            "monthly": 4
+            "hourly": 2,
+            "daily": 3,
+            "weekly": 4,
+            "monthly": 5
         },
         "querygroups": []
     }
@@ -57,8 +58,9 @@
         {{/expandable}}
         {{#statistic}}
             <span class="reportcounts">
-                {{#str}}categorycontent, report_customsql, {
+                {{#str}}categorycontent, report_lsusql, {
                                                                 "manual": {{#quote}}{{manual}}{{/quote}},
+                                                                "asap": {{#quote}}{{asap}}{{/quote}},
                                                                 "daily": {{#quote}}{{daily}}{{/quote}},
                                                                 "weekly": {{#quote}}{{weekly}}{{/quote}},
                                                                 "monthly": {{#quote}}{{monthly}}{{/quote}}
@@ -66,7 +68,7 @@
             </span>
         {{/statistic}}
         {{#showonlythislink}}
-            <a href="{{url}}" class="view-category">{{#str}}showonlythiscategory, report_customsql, {{name}}{{/str}}</a>
+            <a href="{{url}}" class="view-category">{{#str}}showonlythiscategory, report_lsusql, {{name}}{{/str}}</a>
         {{/showonlythislink}}
     </h2>
     <div class="csql_category_reports">
@@ -82,8 +84,8 @@
             {{/queries}}
         {{/querygroups}}
         {{^querygroups}}
-            <h3>{{#str}}availablereports, report_customsql{{/str}}</h3>
-            <p>{{#str}}noreportsavailable, report_customsql{{/str}}</p>
+            <h3>{{#str}}availablereports, report_lsusql{{/str}}</h3>
+            <p>{{#str}}noreportsavailable, report_lsusql{{/str}}</p>
         {{/querygroups}}
     </div>
 </div>

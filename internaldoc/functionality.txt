@@ -1,7 +1,7 @@
-Ad-hoc database queries
+LSU Report API
 
 This report plugin allows Administrators to set up arbitrary database queries
-to act as ad-hoc reports. Reports can run as follows:
+to act as LSU API Reports. Reports can run as follows:
 
 Manual: Run a query on demand,
 Scheduled: queries that are scheduled to run automatically (monthly, weekly, daily).
@@ -74,7 +74,7 @@ Download report via Webservice
 Any report that is added, can be downloaded via the standard Moodle webservice.
 
 Example webservice url will be as follows:
-http://<domainname>/webservice/pluginfile.php/1/report_customsql/download/<reportid>?token=<wstoken>&dataformat=csv
+http://<domainname>/webservice/pluginfile.php/1/report_lsusql/download/<reportid>?token=<wstoken>&dataformat=csv
 
 Required url parameters:
 token - the webservice token
@@ -84,4 +84,4 @@ Optional url parameters:
 timestamp - the timestamp of a previously run scheduled report
 
 any arbitrary number of custom parameter=value pair as defined in the report. E.g.
-http://<domainname>/webservice/pluginfile.php/1/report_customsql/download/<reportid>?token=<wstoken>&dataformat=csv&username=admin&foo=bar
+http://<domainname>/webservice/pluginfile.php/1/report_lsusql/download/<reportid>?token=<wstoken>&dataformat=csv&username=admin&foo=bar

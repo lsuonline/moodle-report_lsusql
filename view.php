@@ -17,8 +17,10 @@
 /**
  * Script to view a particular custom SQL report.
  *
- * @package report_customsql
+ * @package report_lsusql
  * @copyright 2009 The Open University
+ * @copyright 2022 Louisiana State University
+ * @copyright 2022 Robert Russo
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,35 +33,48 @@ require_once($CFG->libdir . '/adminlib.php');
 
 $id = required_param('id', PARAM_INT);
 $urlparams = ['id' => $id];
-$report = $DB->get_record('report_customsql_queries', array('id' => $id));
+$report = $DB->get_record('report_lsusql_queries', array('id' => $id));
 if (!$report) {
-    throw new moodle_exception('invalidreportid', 'report_customsql', report_customsql_url('index.php'), $id);
+    throw new moodle_exception('invalidreportid', 'report_lsusql', report_lsusql_url('index.php'), $id);
 }
 
-$category = $DB->get_record('report_customsql_categories', ['id' => $report->categoryid], '*', MUST_EXIST);
+$permittedusers = !empty($report->userlimit) ? array_map('trim', explode(',', $report->userlimit)) : array($USER->username);
+
+$category = $DB->get_record('report_lsusql_categories', ['id' => $report->categoryid], '*', MUST_EXIST);
+$mainurl = $CFG->wwwroot . '/report/lsusql/index.php';
 
 $embed = optional_param('embed', 0, PARAM_BOOL);
 $urlparams['embed'] = $embed;
 
 // Setup the page.
-admin_externalpage_setup('report_customsql', '', $urlparams,
-        '/report/customsql/view.php', ['pagelayout' => 'report']);
+admin_externalpage_setup('report_lsusql', '', $urlparams,
+        '/report/lsusql/view.php', ['pagelayout' => 'report']);
 $PAGE->set_title(format_string($report->displayname));
-$PAGE->navbar->add(format_string($category->name), report_customsql_url('category.php', ['id' => $report->categoryid]));
+$PAGE->navbar->add(format_string($category->name), report_lsusql_url('category.php', ['id' => $report->categoryid]));
 $PAGE->navbar->add(format_string($report->displayname));
 
 if ($embed) {
     $PAGE->set_pagelayout('embedded');
 }
 
-$output = $PAGE->get_renderer('report_customsql');
+$output = $PAGE->get_renderer('report_lsusql');
 
 $context = context_system::instance();
 if (!empty($report->capability)) {
     require_capability($report->capability, $context);
+
+    $alloweduser = $report->capability == 'report/lsusql:view'
+               ? has_capability($report->capability, $context)
+                   && in_array ($USER->username, $permittedusers)
+                   || is_siteadmin($USER->id)
+               : has_capability($report->capability, $context)
+                   || is_siteadmin($USER->id);
+    if (!$alloweduser) {
+        redirect($mainurl, get_string('noaccess', 'report_lsusql'), 5);
+    }
 }
 
-report_customsql_log_view($id);
+report_lsusql_log_view($id);
 
 // We don't want slow reports blocking the session in other tabs.
 \core\session\manager::write_close();
@@ -68,7 +83,7 @@ if ($report->runable == 'manual') {
 
     // Allow query parameters to be entered.
     if (!empty($report->queryparams)) {
-        $queryparams = report_customsql_get_query_placeholders_and_field_names($report->querysql);
+        $queryparams = report_lsusql_get_query_placeholders_and_field_names($report->querysql);
 
         // Get any query param values that are given in the URL.
         $paramvalues = [];
@@ -80,7 +95,7 @@ if ($report->runable == 'manual') {
         }
 
         $relativeurl = 'view.php?id=' . $id;
-        $mform = new report_customsql_view_form(report_customsql_url($relativeurl), $queryparams);
+        $mform = new report_lsusql_view_form(report_lsusql_url($relativeurl), $queryparams);
         $formdefaults = [];
         if ($report->queryparams) {
             foreach (unserialize($report->queryparams) as $queryparam => $defaultvalue) {
@@ -93,7 +108,7 @@ if ($report->runable == 'manual') {
         $mform->set_data($formdefaults);
 
         if ($mform->is_cancelled()) {
-            redirect(report_customsql_url('index.php'));
+            redirect(report_lsusql_url('index.php'));
         }
 
         if (($newreport = $mform->get_data()) || count($paramvalues) == count($queryparams)) {
@@ -108,8 +123,8 @@ if ($report->runable == 'manual') {
 
         } else {
 
-            admin_externalpage_setup('report_customsql', '', $urlparams,
-                    '/report/customsql/view.php');
+            admin_externalpage_setup('report_lsusql', '', $urlparams,
+                    '/report/lsusql/view.php');
             $PAGE->set_title(format_string($report->displayname));
             echo $OUTPUT->header();
             echo $OUTPUT->heading(format_string($report->displayname));
@@ -126,18 +141,18 @@ if ($report->runable == 'manual') {
     }
 
     try {
-        $csvtimestamp = report_customsql_generate_csv($report, time());
+        $csvtimestamp = report_lsusql_generate_csv($report, time(), false);
         // Get the updated execution times.
-        $report = $DB->get_record('report_customsql_queries', array('id' => $id));
+        $report = $DB->get_record('report_lsusql_queries', array('id' => $id));
     } catch (Exception $e) {
-        throw new moodle_exception('queryfailed', 'report_customsql', report_customsql_url('index.php'),
+        throw new moodle_exception('queryfailed', 'report_lsusql', report_lsusql_url('index.php'),
                     $e->getMessage());
     }
 } else {
     // Runs on schedule.
     $csvtimestamp = optional_param('timestamp', null, PARAM_INT);
     if ($csvtimestamp === null) {
-        $archivetimes = report_customsql_get_archive_times($report);
+        $archivetimes = report_lsusql_get_archive_times($report);
         $csvtimestamp = array_shift($archivetimes);
     }
     if ($csvtimestamp === null) {
@@ -156,10 +171,10 @@ if (!html_is_blank($report->description)) {
 
 if (!empty($paramvalues)) {
     foreach ($paramvalues as $name => $value) {
-        if (report_customsql_get_element_type($name) == 'date_time_selector') {
+        if (report_lsusql_get_element_type($name) == 'date_time_selector') {
             $value = userdate($value, '%F %T');
         }
-        echo html_writer::tag('p', get_string('parametervalue', 'report_customsql',
+        echo html_writer::tag('p', get_string('parametervalue', 'report_lsusql',
                 array('name' => html_writer::tag('b', str_replace('_', ' ', $name)),
                 'value' => s($value))));
     }
@@ -167,28 +182,28 @@ if (!empty($paramvalues)) {
 
 $count = 0;
 if (is_null($csvtimestamp)) {
-    echo html_writer::tag('p', get_string('nodatareturned', 'report_customsql'));
+    echo html_writer::tag('p', get_string('nodatareturned', 'report_lsusql'));
 } else {
-    list($csvfilename, $csvtimestamp) = report_customsql_csv_filename($report, $csvtimestamp);
+    list($csvfilename, $csvtimestamp) = report_lsusql_csv_filename($report, $csvtimestamp);
     if (!is_readable($csvfilename)) {
-        echo html_writer::tag('p', get_string('notrunyet', 'report_customsql'));
+        echo html_writer::tag('p', get_string('notrunyet', 'report_lsusql'));
     } else {
         $handle = fopen($csvfilename, 'r');
 
         if ($report->runable != 'manual' && !$report->singlerow) {
-            echo $OUTPUT->heading(get_string('reportfor', 'report_customsql',
+            echo $OUTPUT->heading(get_string('reportfor', 'report_lsusql',
                     userdate($csvtimestamp, get_string('strftimedate'))), 3);
         }
 
         $table = new html_table();
-        $table->id = 'report_customsql_results';
-        list($table->head, $linkcolumns) = report_customsql_get_table_headers(
-                report_customsql_read_csv_row($handle));
+        $table->id = 'report_lsusql_results';
+        list($table->head, $linkcolumns) = report_lsusql_get_table_headers(
+                report_lsusql_read_csv_row($handle));
 
         $rowlimitexceeded = false;
-        while ($row = report_customsql_read_csv_row($handle)) {
-            $data = report_customsql_display_row($row, $linkcolumns);
-            if (isset($data[0]) && $data[0] === REPORT_CUSTOMSQL_LIMIT_EXCEEDED_MARKER) {
+        while ($row = report_lsusql_read_csv_row($handle)) {
+            $data = report_lsusql_display_row($row, $linkcolumns);
+            if (isset($data[0]) && $data[0] === REPORT_LSUSQL_LIMIT_EXCEEDED_MARKER) {
                 $rowlimitexceeded = true;
             } else {
                 $table->data[] = $data;
@@ -206,40 +221,47 @@ if (is_null($csvtimestamp)) {
         echo html_writer::table($table);
 
         if ($rowlimitexceeded) {
-            echo html_writer::tag('p', get_string('recordlimitreached', 'report_customsql',
-                    $report->querylimit ?? get_config('report_customsql', 'querylimitdefault')),
+            echo html_writer::tag('p', get_string('recordlimitreached', 'report_lsusql',
+                    $report->querylimit ?? get_config('report_lsusql', 'querylimitdefault')),
                     array('class' => 'admin_note'));
         } else {
-            echo html_writer::tag('p', get_string('recordcount', 'report_customsql', $count),
+            echo html_writer::tag('p', get_string('recordcount', 'report_lsusql', $count),
                     array('class' => 'admin_note'));
         }
 
-        echo report_customsql_time_note($report, 'p');
+        echo report_lsusql_time_note($report, 'p');
 
         $urlparams = [];
         if (!empty($paramvalues)) {
             $urlparams = $paramvalues;
         }
+
         $urlparams['timestamp'] = $csvtimestamp;
-        $downloadurl = report_customsql_downloadurl($id, $urlparams);
-        echo $OUTPUT->download_dataformat_selector(get_string('downloadthisreportas', 'report_customsql'),
+
+        // Instantiate the LSUSQL downloader.
+        $downloadurl = report_lsusql_downloadurl($id, $urlparams);
+
+        $lsusqlselector = download_lsusql_dataformat_selector(get_string('downloadthisreportas', 'report_lsusql'),
             $downloadurl, 'dataformat', $urlparams);
+
+        // Output the LSUSQL downloader.
+        echo $lsusqlselector;
     }
 }
 
 if (!empty($queryparams)) {
     echo html_writer::tag('p',
             $OUTPUT->action_link(
-                    report_customsql_url('view.php', ['id' => $id]),
+                    report_lsusql_url('view.php', ['id' => $id]),
                     $OUTPUT->pix_icon('t/editstring', '') . ' ' .
-                    get_string('changetheparameters', 'report_customsql')));
+                    get_string('changetheparameters', 'report_lsusql')));
 }
 
 echo $output->render_report_actions($report, $category, $context);
 
-$archivetimes = report_customsql_get_archive_times($report);
+$archivetimes = report_lsusql_get_archive_times($report);
 if (count($archivetimes) > 1) {
-    echo $OUTPUT->heading(get_string('archivedversions', 'report_customsql'), 3).
+    echo $OUTPUT->heading(get_string('archivedversions', 'report_lsusql'), 3).
             html_writer::start_tag('ul');
     foreach ($archivetimes as $time) {
         $formattedtime = userdate($time, get_string('strftimedate'));
@@ -248,7 +270,7 @@ if (count($archivetimes) > 1) {
             echo html_writer::tag('b', $formattedtime);
         } else {
             echo html_writer::tag('a', $formattedtime,
-                    array('href' => report_customsql_url('view.php',
+                    array('href' => report_lsusql_url('view.php',
                             ['id' => $id, 'timestamp' => $time])));
         }
         echo '</li>';

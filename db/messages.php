@@ -15,10 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Defines message providers (types of message sent) for the customsql report.
+ * Defines message providers (types of message sent) for the lsusql report.
  *
- * @package report_customsql
+ * @package report_lsusql
  * @copyright 2012 The Open University
+ * @copyright 2022 Louisiana State University
+ * @copyright 2022 Robert Russo
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,6 +29,6 @@ defined('MOODLE_INTERNAL') || die();
 $messageproviders = array(
     // Messages informing users that a certain report has run, for reports set to do that.
     'notification' => array(
-        'capability' => 'report/customsql:view',
+        'capability' => 'report/lsusql:view',
     ),
 );

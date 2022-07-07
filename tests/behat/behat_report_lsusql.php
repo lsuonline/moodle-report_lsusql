@@ -19,7 +19,7 @@
  *
  * All these steps include the phrase 'custom SQL report'.
  *
- * @package report_customsql
+ * @package report_lsusql
  * @copyright 2019 The Open University
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -37,7 +37,7 @@ use Behat\Gherkin\Node\TableNode;
  *
  * All these steps include the phrase 'custom SQL report'.
  */
-class behat_report_customsql extends behat_base {
+class behat_report_lsusql extends behat_base {
 
     /**
      * Create a new report in the database.
@@ -84,12 +84,12 @@ class behat_report_customsql extends behat_base {
             unset($report['category']);
         } else {
             $report['categoryid'] = $this->get_category_id_by_name(
-                    get_string('defaultcategory', 'report_customsql'));
+                    get_string('defaultcategory', 'report_lsusql'));
         }
 
         // Capability.
         if (isset($report['capability']) &&
-                !in_array($report['capability'], report_customsql_capability_options())) {
+                !in_array($report['capability'], report_lsusql_capability_options())) {
             throw new Exception('Capability ' . $report['capability'] . ' is not a valid choice.');
         } else {
             $report['capability'] = 'moodle/site:config';
@@ -97,7 +97,7 @@ class behat_report_customsql extends behat_base {
 
         // Capability.
         if (isset($report['runable']) &&
-                !in_array($report['runable'], report_customsql_runable_options())) {
+                !in_array($report['runable'], report_lsusql_runable_options())) {
             throw new Exception('Invalid runable value ' . $report['capability'] . '.');
         } else {
             $report['runable'] = 'manual';
@@ -105,7 +105,7 @@ class behat_report_customsql extends behat_base {
 
         // Time modified.
         if (!isset($report['timemodified'])) {
-            $report['timemodified'] = \report_customsql\utils::time();
+            $report['timemodified'] = \report_lsusql\utils::time();
         }
 
         // Time created.
@@ -146,7 +146,7 @@ class behat_report_customsql extends behat_base {
             'descriptionformat' => FORMAT_HTML,
             'querysql' => (string)$querysql,
             'categoryid' => $this->get_category_id_by_name(
-                    get_string('defaultcategory', 'report_customsql')),
+                    get_string('defaultcategory', 'report_lsusql')),
             'capability' => 'moodle/site:config',
             'runable' => 'manual',
         ];
@@ -157,14 +157,14 @@ class behat_report_customsql extends behat_base {
     protected function save_new_report(array $report) {
         global $CFG, $DB;
 
-        require_once($CFG->dirroot . '/report/customsql/locallib.php');
+        require_once($CFG->dirroot . '/report/lsusql/locallib.php');
 
-        $params = report_customsql_get_query_placeholders_and_field_names($report['querysql']);
+        $params = report_lsusql_get_query_placeholders_and_field_names($report['querysql']);
         if ($params) {
             $report['queryparams'] = serialize($params);
         }
 
-        $DB->insert_record('report_customsql_queries', (object) $report);
+        $DB->insert_record('report_lsusql_queries', (object) $report);
     }
 
     /**
@@ -175,20 +175,20 @@ class behat_report_customsql extends behat_base {
      */
     public function the_custom_sql_report_cateogry_exists(string $name) {
         global $DB;
-        $DB->insert_record('report_customsql_categories', (object) ['name' => $name]);
+        $DB->insert_record('report_lsusql_categories', (object) ['name' => $name]);
     }
 
     /**
      * Views a report.
      *
-     * Goes straight to the URL $CFG->wwwroot/report/customsql/view.php?id=123
+     * Goes straight to the URL $CFG->wwwroot/report/lsusql/view.php?id=123
      *
      * @When /^I view the "(?P<REPORT_NAME>[^"]*)" custom sql report$/
      * @param string $reportname the name of the report to go to.
      */
     public function i_view_the_x_custom_sql_report(string $reportname) {
         $report = $this->get_report_by_name($reportname);
-        $this->getSession()->visit($this->locate_path('/report/customsql/view.php?id=' . $report->id));
+        $this->getSession()->visit($this->locate_path('/report/lsusql/view.php?id=' . $report->id));
     }
 
     /**
@@ -198,7 +198,7 @@ class behat_report_customsql extends behat_base {
      * When I view the "Frog" custom sql report with these URL parameters:
      *   | frogname | freddy |
      *   | colour   | green  |
-     * this goes to the URL $CFG->wwwroot/report/customsql/view.php?id=123&frogname=freddy&colour=green.
+     * this goes to the URL $CFG->wwwroot/report/lsusql/view.php?id=123&frogname=freddy&colour=green.
      *
      * @When /^I view the "(?P<REPORT_NAME>[^"]*)" custom sql report with these URL parameters:$/
      * @param string $reportname the name of the report to go to.
@@ -220,22 +220,22 @@ class behat_report_customsql extends behat_base {
             $queryparams[] = $name . '=' . urlencode($rowdata[1]);
         }
 
-        $this->getSession()->visit($this->locate_path('/report/customsql/view.php?' .
+        $this->getSession()->visit($this->locate_path('/report/lsusql/view.php?' .
                 implode('&', $queryparams)));
     }
 
     /**
-     * Sets a fake time for the report_customsql
+     * Sets a fake time for the report_lsusql
      *
      * @param string $time time in a format that strtotime will understand
-     * @Given /^the Ad-hoc database queries thinks the time is "(?P<strtotime_string>.+)"$/
+     * @Given /^the LSU Report API thinks the time is "(?P<strtotime_string>.+)"$/
      */
-    public function adhoc_database_queries_thinks_the_time_is($time) {
+    public function lsu_sql_queries_thinks_the_time_is($time) {
         $value = strtotime($time);
         if ($value === false) {
             throw new \Behat\Mink\Exception\ExpectationException('specified time is not valid', $this->getSession());
         }
-        set_config('behat_fixed_time', $value, 'report_customsql');
+        set_config('behat_fixed_time', $value, 'report_lsusql');
     }
 
     /**
@@ -246,7 +246,7 @@ class behat_report_customsql extends behat_base {
      */
     protected function get_report_by_name(string $reportname): stdClass {
         global $DB;
-        return $DB->get_record('report_customsql_queries', ['displayname' => $reportname], '*', MUST_EXIST);
+        return $DB->get_record('report_lsusql_queries', ['displayname' => $reportname], '*', MUST_EXIST);
     }
 
     /**
@@ -257,6 +257,6 @@ class behat_report_customsql extends behat_base {
      */
     protected function get_category_id_by_name(string $name): int {
         global $DB;
-        return $DB->get_field('report_customsql_categories', 'id', ['name' => $name], MUST_EXIST);
+        return $DB->get_field('report_lsusql_categories', 'id', ['name' => $name], MUST_EXIST);
     }
 }

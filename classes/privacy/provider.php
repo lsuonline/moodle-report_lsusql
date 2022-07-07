@@ -14,21 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 /**
- * Privacy Subsystem implementation for report_customsql.
+ * Privacy Subsystem implementation for report_lsusql.
  *
- * @package    report_customsql
+ * @package    report_lsusql
  * @copyright  2018 The Open University
+ * @copyright  2022 Louisiana State University
+ * @copyright  2022 Robert Russo
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace report_customsql\privacy;
+namespace report_lsusql\privacy;
 
 use context;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request;
 
 /**
- * Privacy Subsystem for report_customsql implementing null_provider.
+ * Privacy Subsystem for report_lsusql implementing null_provider.
  *
  * @copyright  2018 The Open University
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -48,29 +50,29 @@ class provider implements
      */
     public static function get_metadata(collection $items): collection {
         $items->add_database_table(
-            'report_customsql_queries',
+            'report_lsusql_queries',
             [
-                'displayname' => 'privacy:metadata:reportcustomsqlqueries:displayname',
-                'description' => 'privacy:metadata:reportcustomsqlqueries:description',
-                'descriptionformat' => 'privacy:metadata:reportcustomsqlqueries:descriptionformat',
-                'querysql' => 'privacy:metadata:reportcustomsqlqueries:querysql',
-                'queryparams' => 'privacy:metadata:reportcustomsqlqueries:queryparams',
-                'querylimit' => 'privacy:metadata:reportcustomsqlqueries:querylimit',
-                'capability' => 'privacy:metadata:reportcustomsqlqueries:capability',
-                'lastrun' => 'privacy:metadata:reportcustomsqlqueries:lastrun',
-                'lastexecutiontime' => 'privacy:metadata:reportcustomsqlqueries:lastexecutiontime',
-                'runable' => 'privacy:metadata:reportcustomsqlqueries:runable',
-                'singlerow' => 'privacy:metadata:reportcustomsqlqueries:singlerow',
-                'at' => 'privacy:metadata:reportcustomsqlqueries:at',
-                'emailto' => 'privacy:metadata:reportcustomsqlqueries:emailto',
-                'emailwhat' => 'privacy:metadata:reportcustomsqlqueries:emailwhat',
-                'categoryid' => 'privacy:metadata:reportcustomsqlqueries:categoryid',
-                'customdir' => 'privacy:metadata:reportcustomsqlqueries:customdir',
-                'usermodified' => 'privacy:metadata:reportcustomsqlqueries:usermodified',
-                'timecreated' => 'privacy:metadata:reportcustomsqlqueries:timecreated',
-                'timemodified' => 'privacy:metadata:reportcustomsqlqueries:timemodified'
+                'displayname' => 'privacy:metadata:reportlsusqlqueries:displayname',
+                'description' => 'privacy:metadata:reportlsusqlqueries:description',
+                'descriptionformat' => 'privacy:metadata:reportlsusqlqueries:descriptionformat',
+                'querysql' => 'privacy:metadata:reportlsusqlqueries:querysql',
+                'queryparams' => 'privacy:metadata:reportlsusqlqueries:queryparams',
+                'querylimit' => 'privacy:metadata:reportlsusqlqueries:querylimit',
+                'capability' => 'privacy:metadata:reportlsusqlqueries:capability',
+                'lastrun' => 'privacy:metadata:reportlsusqlqueries:lastrun',
+                'lastexecutiontime' => 'privacy:metadata:reportlsusqlqueries:lastexecutiontime',
+                'runable' => 'privacy:metadata:reportlsusqlqueries:runable',
+                'singlerow' => 'privacy:metadata:reportlsusqlqueries:singlerow',
+                'at' => 'privacy:metadata:reportlsusqlqueries:at',
+                'emailto' => 'privacy:metadata:reportlsusqlqueries:emailto',
+                'emailwhat' => 'privacy:metadata:reportlsusqlqueries:emailwhat',
+                'categoryid' => 'privacy:metadata:reportlsusqlqueries:categoryid',
+                'customdir' => 'privacy:metadata:reportlsusqlqueries:customdir',
+                'usermodified' => 'privacy:metadata:reportlsusqlqueries:usermodified',
+                'timecreated' => 'privacy:metadata:reportlsusqlqueries:timecreated',
+                'timemodified' => 'privacy:metadata:reportlsusqlqueries:timemodified'
             ],
-            'privacy:metadata:reportcustomsqlqueries'
+            'privacy:metadata:reportlsusqlqueries'
         );
 
         return $items;
@@ -103,7 +105,7 @@ class provider implements
         if ($context->contextlevel === CONTEXT_SYSTEM) {
             // If we are checking system context, we need to get all distinct usermodified from the table.
             $sql = 'SELECT DISTINCT usermodified
-                      FROM {report_customsql_queries}';
+                      FROM {report_lsusql_queries}';
 
             $userlist->add_from_sql('usermodified', $sql, []);
         }
@@ -125,7 +127,7 @@ class provider implements
             // We only export from system context.
             if ($context->contextlevel === CONTEXT_SYSTEM) {
                 $records = $DB->get_records(
-                    'report_customsql_queries',
+                    'report_lsusql_queries',
                     ['usermodified' => $user->id],
                     'displayname'
                 );
@@ -156,7 +158,7 @@ class provider implements
                 }
 
                 $subcontext = [
-                    get_string('privacy:metadata:reportcustomsqlqueries', 'report_customsql')
+                    get_string('privacy:metadata:reportlsusqlqueries', 'report_lsusql')
                 ];
                 request\writer::with_context($context)->export_data($subcontext, (object)$exportdata);
             }
@@ -174,7 +176,7 @@ class provider implements
 
         if ($context->contextlevel === CONTEXT_SYSTEM) {
             $adminuserid = get_admin()->id;
-            $DB->set_field('report_customsql_queries', 'usermodified', $adminuserid);
+            $DB->set_field('report_lsusql_queries', 'usermodified', $adminuserid);
         }
     }
 
@@ -193,7 +195,7 @@ class provider implements
                 $userid = $contextlist->get_user()->id;
                 $adminuserid = get_admin()->id;
 
-                $DB->set_field('report_customsql_queries', 'usermodified',
+                $DB->set_field('report_lsusql_queries', 'usermodified',
                     $adminuserid, ['usermodified' => $userid]);
             }
         }
@@ -214,7 +216,7 @@ class provider implements
             $userids = $userlist->get_userids();
             list($sqlcondition, $params) = $DB->get_in_or_equal($userids);
             $adminuserid = get_admin()->id;
-            $DB->set_field_select('report_customsql_queries', 'usermodified', $adminuserid,
+            $DB->set_field_select('report_lsusql_queries', 'usermodified', $adminuserid,
                  'usermodified ' . $sqlcondition, $params);
         }
     }
@@ -229,9 +231,9 @@ class provider implements
      */
     protected static function you_or_somebody_else($userid, $user) {
         if ($userid == $user->id) {
-            return get_string('privacy_you', 'report_customsql');
+            return get_string('privacy_you', 'report_lsusql');
         } else {
-            return get_string('privacy_somebodyelse', 'report_customsql');
+            return get_string('privacy_somebodyelse', 'report_lsusql');
         }
     }
 }

@@ -14,21 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace report_customsql\output;
+namespace report_lsusql\output;
 
 use context;
 use moodle_url;
 use renderable;
 use templatable;
 use renderer_base;
-use report_customsql\utils;
-use report_customsql\local\category as report_category;
+use report_lsusql\utils;
+use report_lsusql\local\category as report_category;
 
 /**
  * Index page renderable class.
  *
- * @package    report_customsql
+ * @package    report_lsusql
  * @copyright  2021 The Open Univesity
+ * @copyright  2022 Louisiana State University
+ * @copyright  2022 Robert Russo
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class index_page implements renderable, templatable {
@@ -82,13 +84,13 @@ class index_page implements renderable, templatable {
         }
 
         $addquerybutton = $managecategorybutton = '';
-        if (has_capability('report/customsql:definequeries', $this->context)) {
-            $addquerybutton = $output->single_button(report_customsql_url('edit.php', ['returnurl' => $this->returnurl]),
-                get_string('addreport', 'report_customsql'), 'post', ['class' => 'mb-1']);
+        if (has_capability('report/lsusql:definequeries', $this->context)) {
+            $addquerybutton = $output->single_button(report_lsusql_url('edit.php', ['returnurl' => $this->returnurl]),
+                get_string('addreport', 'report_lsusql'), 'post', ['class' => 'mb-1']);
         }
-        if (has_capability('report/customsql:managecategories', $this->context)) {
-            $managecategorybutton = $output->single_button(report_customsql_url('manage.php'),
-                get_string('managecategories', 'report_customsql'));
+        if (has_capability('report/lsusql:managecategories', $this->context)) {
+            $managecategorybutton = $output->single_button(report_lsusql_url('manage.php'),
+                get_string('managecategories', 'report_lsusql'));
         }
 
         $data = [
